@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<title>Radio Amigos Unidos</title>
+<meta name="description" content="RAU" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+<meta property="og:title" content="RAU Player" />
+<meta property="og:description" content="RAU" />
+<link rel="icon" type="image/png" href="https://i.imgur.com/nNh98kV.png" sizes="48x48" />
+<link rel="icon" type="image/png" href="https://i.imgur.com/nNh98kV.png" sizes="96x96" />
+<link rel="icon" type="image/png" href="https://i.imgur.com/nNh98kV.png" sizes="144x144" />
+<link rel="icon" type="image/png" href="https://i.imgur.com/nNh98kV.png" sizes="192x192" />
+<link rel="apple-touch-icon" href="https://i.imgur.com/nNh98kV.png" sizes="180x180"/>
+    <style type="text/css">
+        * {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #0c0c0c;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+
+        .RAU {
+            position: relative;
+            width: 550px;
+            height: 380px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.9), 0px 0px 15px rgba(255, 0, 0, 0.3);
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: cover;
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .overlay-protection {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .img-icon-left {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 90px;
+            height: 90px;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .img-icon-right {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 90px;
+            height: 90px;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .img-icon-left img, .img-icon-right img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.8));
+        }
+
+        .listeners-card {
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 6px 16px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 6;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .live-badge {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #ff3b30;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #ff3b30;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(255, 59, 48, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 59, 48, 0); }
+        }
+
+        .listeners-count {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #ffffff;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+        }
+
+        .listeners-count svg {
+            fill: #80FF00;
+            width: 14px;
+            height: 14px;
+        }
+
+        .player-wrapper {
+            position: absolute;
+            top: calc(50% - 25px);
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 7;
+            width: auto;
+            max-width: 90%;
+            text-align: center;
+        }
+
+        .player-container {
+            display: inline-block;
+            transform: scale(1.35);
+            transform-origin: center center;
+        }
+
+        #dj_profile {
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        }
+
+        #dj_profile img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        #animation {
+            position: absolute;
+            left: 20px;
+            bottom: 25px;
+            width: 510px;
+            height: 82px;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border-radius: 41px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            overflow: hidden;
+        }
+
+        #animation iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+    <div class="RAU" id="secure-player-root">
+        <div class="overlay-protection"></div>
+        
+        <div class="img-icon-left">
+            <img id="logo-left" alt="Logo Esquerda">
+        </div>
+
+        <div class="listeners-card">
+            <div class="live-badge">
+                <span class="live-dot"></span> NO AR
+            </div>
+            <div style="width: 1px; height: 12px; background: rgba(255,255,255,0.2);"></div>
+            <div class="listeners-count">
+                <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                <span id="listener-number">--</span> <span style="font-size: 11px; color: #ccc;">ouvintes</span>
+            </div>
+        </div>
+
+        <div class="img-icon-right">
+            <img id="logo-right" alt="Logo Direita">
+        </div>
+
+        <div class="player-wrapper">
+            <div class="player-container">
+                <div id="dj_profile"></div>
+            </div>
+        </div>
+
+        <div id="animation">
+            <iframe id="protected-iframe" allow="autoplay; encrypted-media"></iframe>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.ripples/0.5.3/jquery.ripples.js"></script>
+    
+    <script id="sonic_js" data-port="8248" src="https://sp0.redeaudio.com/cp/widgets.js?r=731"></script>
+
+    <script>
+        const ENC_CONFIG = {
+            sig: "UkFVLVNFQ1VSRS05OTQ4Mi1WQUxJREFURUQ=", 
+            prt: "ODI0OA==",                            
+            bg:  "aHR0cHM6Ly9pLmltZ3VyLmNvbS8wNzZUT1hRLnBuZw==",
+            ico: "aHR0cHM6Ly9pLmltZ3VyLmNvbS9SM3p4RVVrLnBuZw==",
+            api: "aHR0cHM6Ly9zcDAucmVkZWF1ZGlvLmNvbToxMDgyMi9zdGF0cz9zaWQ9MSZqc29uPTE=",
+            ifr: "aHR0cHM6Ly94YXRyYWRpby5jb20vcGxheWVyL2d5NnpqenZrcmEuaHRtbA==" 
+        };
+
+        function b64Decode(encodedStr) {
+            try {
+                return decodeURIComponent(escape(window.atob(encodedStr)));
+            } catch (e) {
+                return window.atob(encodedStr);
+            }
+        }
+
+        const MASTER_SIGNATURE = b64Decode(ENC_CONFIG.sig);
+        const EXPECTED_PORT = b64Decode(ENC_CONFIG.prt);
+        const DECODED_BG = b64Decode(ENC_CONFIG.bg);
+        const DECODED_ICO = b64Decode(ENC_CONFIG.ico);
+        const DECODED_API = b64Decode(ENC_CONFIG.api);
+        const DECODED_IFRAME = b64Decode(ENC_CONFIG.ifr);
+
+        function selfDestruct() {
+            document.body.innerHTML = '<div style="background:#0c0c0c; color:#ff3b30; width:100vw; height:100vh; display:flex; justify-content:center; align-items:center; font-family:sans-serif; text-align:center; padding:20px;"><div><h2 style="margin-bottom:10px;">⚠ ERRO DE AUTENTICAÇÃO DO PLAYER</h2><p style="color:#aaa; font-size:14px;">Este código foi modificado ou copiado sem autorização. A licença é inválida.</p></div></div>';
+            throw new Error("Invalid license or tampered code.");
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            var lLeft = document.getElementById('logo-left');
+            var lRight = document.getElementById('logo-right');
+            var pIframe = document.getElementById('protected-iframe');
+
+            if (lLeft) lLeft.src = DECODED_ICO;
+            if (lRight) lRight.src = DECODED_ICO;
+            if (pIframe) pIframe.src = DECODED_IFRAME;
+        });
+
+        setTimeout(function() {
+            var sonicScript = document.getElementById('sonic_js');
+            var iframe = document.getElementById('protected-iframe');
+
+            if (!sonicScript || sonicScript.getAttribute('data-port') !== EXPECTED_PORT) {
+                selfDestruct();
+            }
+
+            if (!iframe || !iframe.src.includes('xatradio.com')) {
+                selfDestruct();
+            }
+
+            if (typeof MASTER_SIGNATURE !== 'string' || MASTER_SIGNATURE.length < 10) {
+                selfDestruct();
+            }
+        }, 1800);
+
+        document.addEventListener('keydown', function(e) {
+            if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) || (e.ctrlKey && e.keyCode === 85)) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            var $player = $('.RAU');
+            var bgImageUrl = DECODED_BG;
+
+            function initializeWaterEffect() {
+                var img = new Image();
+                img.crossOrigin = "Anonymous";
+                img.src = bgImageUrl;
+
+                img.onload = function() {
+                    var canvas = document.createElement('canvas');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    var ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
+                    
+                    try {
+                        var dataURL = canvas.toDataURL('image/png');
+                        $player.css('background-image', 'url(' + dataURL + ')');
+                    } catch(e) {
+                        $player.css('background-image', 'url(' + bgImageUrl + ')');
+                    }
+
+                    startRipples();
+                };
+
+                img.onerror = function() {
+                    $player.css('background-image', 'url(' + bgImageUrl + ')');
+                    startRipples();
+                };
+            }
+
+            function startRipples() {
+                try {
+                    $player.ripples({
+                        resolution: 256,
+                        dropRadius: 18,
+                        perturbance: 0.04,
+                        interactive: true
+                    });
+
+                    setInterval(function() {
+                        var x = Math.random() * $player.outerWidth();
+                        var y = Math.random() * $player.outerHeight();
+                        $player.ripples('drop', x, y, 14, 0.035);
+                    }, 1300);
+
+                } catch (e) {
+                    console.warn("WebGL não suportado para efeito de água.");
+                }
+            }
+
+            initializeWaterEffect();
+
+            function fetchListeners() {
+                $.ajax({
+                    url: DECODED_API,
+                    dataType: 'jsonp',
+                    timeout: 3000,
+                    success: function(data) {
+                        if (data && data.listeners !== undefined) {
+                            $('#listener-number').text(data.listeners);
+                        } else if (data && data.currentlisteners !== undefined) {
+                            $('#listener-number').text(data.currentlisteners);
+                        } else {
+                            generateSimulatedListeners();
+                        }
+                    },
+                    error: function() {
+                        generateSimulatedListeners();
+                    }
+                });
+            }
+
+            function generateSimulatedListeners() {
+                var currentVal = parseInt($('#listener-number').text());
+                if (isNaN(currentVal)) {
+                    currentVal = Math.floor(Math.random() * 25) + 40;
+                } else {
+                    var variation = Math.floor(Math.random() * 5) - 2;
+                    currentVal = Math.max(12, currentVal + variation);
+                }
+                $('#listener-number').text(currentVal);
+            }
+
+            fetchListeners();
+            setInterval(fetchListeners, 10000);
+        });
+    </script>
+</body>
+</html>
